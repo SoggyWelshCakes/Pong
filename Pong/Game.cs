@@ -2,13 +2,16 @@
 
 public class Game
 { 
-    public ushort X { get; }
-    public ushort Y { get; }
+    public ushort sizeX { get; }
+    public ushort sizeY { get; }
     public byte CompDifficulty { get; }
 
     public Player P1 { get; }
     public Player P2 { get; }
     public Ball ball { get; }
+
+    //public byte P1S { get; set; } //player size??
+    //public byte P2S { get; set; }
 
     private const ushort maxX = 200;
     private const ushort maxY = 200;
@@ -16,15 +19,13 @@ public class Game
 
     public Game (ushort x, ushort y, byte cd)
     {
-        if (x > maxX) x = maxX;
-        if (y > maxY) y = maxY;
+        sizeX = x <= maxX ? x : maxX;
+        sizeY = y <= maxY ? y : maxY;
+        CompDifficulty = cd <= maxDifficulty ? cd : maxDifficulty;
 
-        X = x;
-        Y = y;
-
-        P1 = new Player(1, (ushort)(Y / 2));
-        P2 = new Player((ushort)(X - 1), (ushort)(Y / 2));
-        ball = new Ball((ushort)(X / 2), (ushort)(Y / 2));
+        P1 = new Player(1, (ushort)(sizeY / 2));
+        P2 = new Player((ushort)(sizeX - 1), (ushort)(sizeY / 2));
+        ball = new Ball((ushort)(sizeX / 2), (ushort)(sizeY / 2));
     }
 
     public void GameUpdate(Key key)
@@ -42,18 +43,17 @@ public class Game
                 break;
 
             case Key.P2Up:
-                if (CompDifficulty == 0) goto case Key.P1Up;
+                if (CompDifficulty != 0) goto case Key.P1Up;
                 P2.Y++;
                 break;
 
             case Key.P2Down:
-                if (CompDifficulty == 0) goto case Key.P1Down;
+                if (CompDifficulty != 0) goto case Key.P1Down;
                 P2.Y--;
                 break;
 
-            default: throw new ApplicationException($"Key ({key}) was not valid.");
+            default: break;
         }
-
     }
 
     public enum Key

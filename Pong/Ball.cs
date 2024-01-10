@@ -3,7 +3,7 @@ public class Ball
 {
    public ushort X { get; set; }
    public ushort Y { get; set; }
-   public (short Vx, short Vy) V { get; set; }
+   public (short x, short y) V { get; set; }
 
     public Ball(ushort x, ushort y, (short, short)? v = null)
     {
@@ -21,7 +21,7 @@ public class Ball
         return (X, Y) == (p.X, p.Y);
     }
 
-    public override string ToString() => $"{X},{Y},{V.Vx},{V.Vy}";
+    public override string ToString() => $"{X},{Y},{V.x},{V.y}";
     public override int GetHashCode() => HashCode.Combine(X, Y, V);
 
     #endregion
