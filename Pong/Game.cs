@@ -1,27 +1,68 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿namespace Pong;
 
-namespace Pong;
-
-internal class Game
+public class Game
 { 
     public ushort X { get; }
     public ushort Y { get; }
+    public byte CompDifficulty { get; }
+
+    public Player P1 { get; }
+    public Player P2 { get; }
+    public Ball ball { get; }
 
     private const ushort maxX = 200;
     private const ushort maxY = 200;
+    private const byte maxDifficulty = 10;
 
-    private Player p1 { get; set; }
-    private Player p2 { get; set; }
-    private Ball ball { get; set; }
-
-    public Game (ushort x, ushort y)
+    public Game (ushort x, ushort y, byte cd)
     {
         if (x > maxX) x = maxX;
         if (y > maxY) y = maxY;
+
         X = x;
-        Y = y;  
+        Y = y;
 
+        P1 = new Player(1, (ushort)(Y / 2));
+        P2 = new Player((ushort)(X - 1), (ushort)(Y / 2));
+        ball = new Ball((ushort)(X / 2), (ushort)(Y / 2));
+    }
 
+    public void GameUpdate(Key key)
+    {
+        switch (key)
+        {
+            //add verification to ensure positions are in bounds.
+
+            case Key.P1Up:
+                P1.Y++;
+                break;
+
+            case Key.P1Down:
+                P2.Y--;
+                break;
+
+            case Key.P2Up:
+                if (CompDifficulty == 0) goto case Key.P1Up;
+                P2.Y++;
+                break;
+
+            case Key.P2Down:
+                if (CompDifficulty == 0) goto case Key.P1Down;
+                P2.Y--;
+                break;
+
+            default: throw new ApplicationException($"Key ({key}) was not valid.");
+        }
+
+    }
+
+    public enum Key
+    {
+        Null,
+        P1Up,
+        P1Down,
+        P2Up,
+        P2Down,
     }
 
 
